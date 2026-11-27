@@ -95,3 +95,5 @@ A \`.github/workflows/deeptutor-firestore.yml\` PR-ben ellenőrzi a Firestore-sz
 Az eredeti automatikus mentés fejlesztés PR #2-ben anonim belépést használt. A fiókalapú verzió ezt magába foglalja és lecseréli az Anonymous sign-in hívást.
 **Ne egyesítsd külön a PR #2-t az új bejelentkezős verzió helyett.**
 Az átállás előtt a már folyamatban lévő anonim kitöltéseket fejezzétek be vagy exportáljátok JSON-ként, mert az új Firestore-szabályok nem engedik őket továbbírni.
+
+Ha te szeretnéd megadni a kezdeti jelszót, a program nem visszhangzott terminálos jelszókérdést nyit: `python bio-felmero/admin/manage_users.py add diak01 --choose-password`. Ugyanez `reset` esetén is működik. **Jelszót ne írj a parancssor argumentumába**, és ne küldd ChatGPT-be.
