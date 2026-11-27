@@ -1,3 +1,4 @@
+import { createRemoteSync } from "./firebase-sync.js";
 const KEY = "deeptutor-bio-diagnostic-v1";
 const $ = (id) => document.getElementById(id);
 let bank;
@@ -11,8 +12,42 @@ function readState() {
       && typeof v.answers === "object" && typeof v.attemptId === "string" ? v : null;
   } catch { return null; }
 }
-function save() {
+const remote = createRemoteSync(
+  () => window.BIO_FIREBASE_CONFIG,
+  (status, error, attemptId) => {
+    if (!state || state.attemptId !== attemptId) return;
+    state.cloudStatus = status === "synced" && state.completed ? "ok" : status;
+    state.syncError = error || null;
+    localStorage.setItem(KEY, JSON.stringify(state));
+    updateSyncStatus();
+    if (state.completed && !$("done").hidden) {
+      $("doneStatus").textContent =
+        status === "synced" ? "A Firebase-mentés sikeres." :
+        status === "failed" ? "Mentési hiba: " + error + ". A helyi másolat megmaradt." : "";
+      renderDone();
+    }
+  }
+);
+
+function updateSyncStatus() {
+  if (!$("syncState") || !state) return;
+  const messages = {
+    none: "Helyben mentve · Firebase mentés a válaszadáskor indul",
+    pending: "Helyben mentve · Firebase: szinkronizálás folyamatban",
+    synced: "Helyben és Firebase-ben mentve",
+    failed: "Helyben mentve · Firebase-hiba: " + (state.syncError || "Próbáld újra"),
+    "no-config": "Helyben mentve · A Firebase még nincs konfigurálva"
+  };
+  $("syncState").textContent = messages[state.cloudStatus] || "Helyben mentve";
+  $("retryDraft").hidden = state.cloudStatus !== "failed";
+}
+
+function save({ upload = true, immediate = false } = {}) {
+  if (upload && state && !state.completed) {
+    remote.schedule(exportPayload(), { immediate });
+  }
   localStorage.setItem(KEY, JSON.stringify(state));
+  updateSyncStatus();
 }
 function newState() {
   const token = () => crypto.randomUUID();
@@ -122,6 +157,7 @@ function renderQuestion() {
   $("previous").disabled = state.index === 0;
   $("next").textContent = state.index === bank.questions.length-1 ? "Felmérő befejezése" : "Következő";
   updateProgress();
+  updateSyncStatus();
   enteredAt = Date.now();
 }
 function go(delta) {
@@ -131,15 +167,17 @@ function go(delta) {
     return;
   }
   state.index = Math.max(0, Math.min(bank.questions.length - 1, state.index + delta));
-  save();
+  save({ immediate: true });
   renderQuestion();
 }
 function exportPayload() {
-  const elapsed = Math.min(604800, Math.max(0,Math.round((new Date(state.submittedAt).getTime() - new Date(state.startedAt).getTime()) / 1000)));
+  const end = state.submittedAt ? new Date(state.submittedAt).getTime() : Date.now();
+  const elapsed = Math.min(604800, Math.max(0, Math.round((end - new Date(state.startedAt).getTime()) / 1000)));
   return {
     testId: bank.testId, schemaVersion: bank.version, attemptId: state.attemptId,
     studentCode: state.studentCode, startedAt: state.startedAt,
-    submittedAt: state.submittedAt, durationSeconds: elapsed, consentVersion: "v1",
+    submittedAt: state.submittedAt, completed: !!state.completed,
+    updatedAt: new Date().toISOString(), durationSeconds: elapsed, consentVersion: "v1",
     answers: bank.questions.map(q => ({
       questionId: q.id, topicId: q.topic, kind: q.kind,
       answer: state.answers[q.id]?.answer || "",
@@ -159,9 +197,12 @@ function downloadJson() {
 function finish() {
   const missing = bank.questions.length-answeredCount();
   if (!confirm(missing ? missing + " kérdésnél nem adtál választ. Így is befejezed?" : "Befejezed és véglegesíted a felmérőt?")) return;
-  state.completed=true;state.submittedAt=new Date().toISOString();
-  state.cloudStatus="pending";save();renderDone();
-  if (window.BIO_FIREBASE_CONFIG?.projectId) upload();
+  state.completed = true;
+  state.submittedAt = new Date().toISOString();
+  state.cloudStatus = "pending";
+  localStorage.setItem(KEY, JSON.stringify(state));
+  renderDone();
+  remote.schedule(exportPayload(), { immediate: true });
 }
 function renderDone() {
   view("done");
@@ -184,33 +225,10 @@ function renderDone() {
   $("retryUpload").hidden=!cloud || state.cloudStatus==="ok";
   $("retryUpload").disabled=state.cloudStatus==="pending";
 }
-async function upload() {
-  if (!window.BIO_FIREBASE_CONFIG?.projectId) return;
-  state.cloudStatus="pending";save();renderDone();
-  try {
-    // SDK letöltése csak beküldéskor szükséges: offline kipróbálásnál nem.
-    const [a,b,c]=await Promise.all([
-      import("https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js"),
-      import("https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js"),
-      import("https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js")
-    ]);
-    const app=a.initializeApp(window.BIO_FIREBASE_CONFIG);
-    const auth=b.getAuth(app);
-    const credential=await b.signInAnonymously(auth);
-    const db=c.getFirestore(app);
-    const payload=exportPayload();
-    payload.userUid=credential.user.uid;
-    payload.startedAt=new Date(payload.startedAt);
-    payload.submittedAt=new Date(payload.submittedAt);
-    await c.setDoc(c.doc(db,"attempts",state.attemptId),payload);
-    state.cloudStatus="ok";
-    $("doneStatus").textContent="A felmérő beküldése sikeres.";
-  } catch (e) {
-    state.cloudStatus="failed";
-    $("doneStatus").textContent="Beküldési hiba: " + (e?.code || e?.message || "Ismeretlen hiba") + ". Kérlek, töltsd le a JSON másolatot.";
-  }
-  save();renderDone();
+function retryCloudSave() {
+  remote.schedule(exportPayload(), { immediate: true });
 }
+
 function init() {
   state=readState();
   $("introStatus").textContent=state ? "Korábbi kitöltést találtunk ezen az eszközön." : "A kitöltés azonosítóval, név megadása nélkül történik.";
@@ -221,8 +239,13 @@ function init() {
 $("consent").addEventListener("change",e=>$("start").disabled=!e.target.checked);
 $("start").addEventListener("click",()=>{
   if (!$("consent").checked) return;
-  if (!state) {state=newState();save();}
-  if (state.completed) renderDone(); else renderQuestion();
+  if (!state) {state=newState();save({ upload: false });}
+  if (state.completed) {
+    renderDone();
+  } else {
+    renderQuestion();
+    if (answeredCount() > 0) remote.schedule(exportPayload(), { immediate: true });
+  }
 });
 $("reset").addEventListener("click",()=>{
   if (!confirm("Törlöd a helyben tárolt kitöltést? A már beküldött Firestore-adatok nem törlődnek.")) return;
@@ -231,9 +254,16 @@ $("reset").addEventListener("click",()=>{
 $("previous").addEventListener("click",()=>go(-1));
 $("next").addEventListener("click",()=>go(1));
 $("download").addEventListener("click",downloadJson);
-$("retryUpload").addEventListener("click",upload);
+$("retryUpload").addEventListener("click", retryCloudSave);
+$("retryDraft").addEventListener("click", () => remote.schedule(exportPayload(), { immediate: true }));
 $("reload").addEventListener("click",()=>location.reload());
-window.addEventListener("pagehide",()=>{if(state&&!state.completed){handleTime();save();}});
+window.addEventListener("pagehide", () => {
+  if (state && !state.completed) {
+    handleTime();
+    save({ upload: false }); // helyi mentés a lap bezárásakor is
+    // Böngészőbezáráskor a hálózati írás nem garantálható.
+  }
+});
 try {
   const response=await fetch("./questions.json",{cache:"no-store"});
   if (!response.ok) throw new Error("HTTP " + response.status);

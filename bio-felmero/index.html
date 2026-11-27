@@ -29,7 +29,7 @@
           <p>A bizonytalan válasz is hasznos. Ha nem tudsz valamit, nyugodtan hagyd üresen, vagy válaszd a „Nem tudom” lehetőséget. A teszt bármikor folytatható ugyanebben a böngészőben.</p>
         </div>
         <div class="privacy">
-          <label class="consent"><input type="checkbox" id="consent"> <span>Elolvastam: a válaszaim a böngészőmben helyileg mentődnek; a felmérő végén JSON-ként letölthetem őket. Ha a weboldal üzemeltetője bekapcsolta a Firebase-t, a beküldéssel a válaszok egy anonim azonosító alatt a Firebase Firestore-ba kerülnek további tanulási elemzés céljából. Nem adok meg személyes vagy egészségügyi adatokat a szöveges válaszaimban.</span></label>
+          <label class="consent"><input type="checkbox" id="consent"> <span>Elolvastam: a válaszaim a böngészőmben helyileg mentődnek; a felmérő végén JSON-ként letölthetem őket. Ha a weboldal üzemeltetője bekapcsolta a Firebase-t, minden megadott vagy módosított válasz automatikusan (a szöveges válaszok rövid késleltetéssel) egy anonim azonosító alatt a Firebase Firestore-ba kerül további tanulási elemzés céljából. A befejezetlen kitöltések is tárolódnak. Nem adok meg személyes vagy egészségügyi adatokat a szöveges válaszaimban.</span></label>
         </div>
         <div class="actions">
           <button id="start" class="btn primary" disabled>Felmérő indítása</button>
@@ -55,6 +55,8 @@
             <div class="confidence-items" id="confidenceOptions"></div>
           </fieldset>
           <p class="hint">A mentés automatikus. A kérdések között szabadon mozoghatsz.</p>
+          <p class="hint" id="syncState" role="status" aria-live="polite">Helyben mentve</p>
+          <button class="btn ghost" id="retryDraft" hidden>Felhőmentés újrapróbálása</button>
         </div>
         <div class="quiz-nav">
           <button class="btn ghost" id="previous">Vissza</button>

@@ -1,37 +1,68 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Default deny: sem nyilvános olvasás, sem listázás.
-    match /{document=**} { allow read, write: if false; }
+    // Alapértelmezés: minden hozzáférés tiltott, kivéve a lent engedélyezett írásokat.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function anonymousUser() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == "anonymous";
+    }
+
+    function validAttempt(id) {
+      let d = request.resource.data;
+      return d.keys().hasOnly([
+          "testId", "schemaVersion", "attemptId", "studentCode", "userUid",
+          "startedAt", "submittedAt", "updatedAt", "completed",
+          "durationSeconds", "answers", "consentVersion"
+        ])
+        && d.keys().hasAll([
+          "testId", "schemaVersion", "attemptId", "studentCode", "userUid",
+          "startedAt", "submittedAt", "updatedAt", "completed",
+          "durationSeconds", "answers", "consentVersion"
+        ])
+        && d.testId == "BIO-DIAG-001"
+        && d.schemaVersion == 1
+        && d.consentVersion == "v1"
+        && d.attemptId == id
+        && d.userUid == request.auth.uid
+        && d.studentCode is string
+        && d.studentCode.size() >= 8
+        && d.studentCode.size() <= 40
+        && d.startedAt is timestamp
+        && d.updatedAt is timestamp
+        && d.completed is bool
+        // Befejezetlen: submittedAt = null; végleges: valódi időbélyeg.
+        && ((d.completed == false && d.submittedAt == null)
+          || (d.completed == true && d.submittedAt is timestamp))
+        && d.durationSeconds is int
+        && d.durationSeconds >= 0
+        && d.durationSeconds <= 604800
+        && d.answers is list
+        && d.answers.size() == 40;
+    }
 
     match /attempts/{attemptId} {
-      // Csak egyszeri létrehozás; kitöltők nem olvashatják mások válaszait.
-      allow create: if request.auth != null
-        && request.auth.token.firebase.sign_in_provider == "anonymous"
-        && request.resource.data.keys().hasOnly([
-          "testId","schemaVersion","attemptId","studentCode","userUid",
-          "startedAt","submittedAt","durationSeconds","answers","consentVersion"
-        ])
-        && request.resource.data.keys().hasAll([
-          "testId","schemaVersion","attemptId","studentCode","userUid",
-          "startedAt","submittedAt","durationSeconds","answers","consentVersion"
-        ])
-        && request.resource.data.testId == "BIO-DIAG-001"
-        && request.resource.data.schemaVersion == 1
-        && request.resource.data.consentVersion == "v1"
-        && request.resource.data.attemptId == attemptId
-        && request.resource.data.userUid == request.auth.uid
-        && request.resource.data.studentCode is string
-        && request.resource.data.studentCode.size() >= 8
-        && request.resource.data.studentCode.size() <= 40
-        && request.resource.data.startedAt is timestamp
-        && request.resource.data.submittedAt is timestamp
-        && request.resource.data.durationSeconds is int
-        && request.resource.data.durationSeconds >= 0
-        && request.resource.data.durationSeconds <= 604800
-        && request.resource.data.answers is list
-        && request.resource.data.answers.size() == 40;
-      allow get, list, update, delete: if false;
+      // Csak a bejelentkezett anonim felhasználó hozhat létre saját kitöltést.
+      allow create: if anonymousUser() && validAttempt(attemptId);
+
+      // A félkész kitöltést csak az eredeti tulajdonos módosíthatja.
+      // A tulajdonos, az azonosítók és a kezdési idő nem írhatók át.
+      // A véglegesített kitöltés nem módosítható.
+      allow update: if anonymousUser()
+        && resource.data.userUid == request.auth.uid
+        && resource.data.completed == false
+        && validAttempt(attemptId)
+        && request.resource.data.attemptId == resource.data.attemptId
+        && request.resource.data.studentCode == resource.data.studentCode
+        && request.resource.data.startedAt == resource.data.startedAt
+        && request.resource.data.testId == resource.data.testId
+        && request.resource.data.schemaVersion == resource.data.schemaVersion;
+
+      // A kitöltők egymás adatait sem kérdezhetik le.
+      allow get, list, delete: if false;
     }
   }
 }
