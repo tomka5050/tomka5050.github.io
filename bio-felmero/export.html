@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#164d62">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Válaszok exportálása | DeepTutor</title>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    .export-panel{max-width:750px;margin:24px auto}
+    .export-form{display:grid;gap:12px;max-width:450px;margin-top:16px}
+    .export-form label{font-weight:600}
+    .export-form input{padding:13px 14px;border-radius:10px;border:1px solid #a9c0c6;width:100%}
+    .export-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:20px}
+    .export-actions .btn{min-width:150px}
+    .export-result{padding:16px;margin-top:15px;border-radius:10px;background:#edf5f6}
+    .export-result ul{padding-left:22px;line-height:1.8}
+    .export-status{min-height:1.5em}
+    .export-error{color:#ab2633}
+    .export-safe{font-size:.9rem}
+    .export-checkbox{display:flex;gap:10px;align-items:center;margin-top:15px}
+    .export-checkbox input{width:20px;height:20px}
+    [hidden]{display:none!important}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a href="./" class="brand" aria-label="DeepTutor felmérő"><span class="brand-icon">D</span><span>DeepTutor <small>BIOLÓGIA</small></span></a>
+      <span class="pill">Válaszexport · JSON</span>
+    </header>
+    <main>
+      <section class="intro-card export-panel">
+        <span class="eyebrow">FIRESTORE ADATEXPORT</span>
+        <h1>Mentett válaszok exportálása</h1>
+        <p class="lead">A bejelentkezett fiók saját kitöltéseit töltheted le JSON-formátumban. Nincs szükség Firebase-adminisztrátori kulcsra.</p>
+        <p class="subtle" id="status" role="status" aria-live="polite">Bejelentkezés ellenőrzése…</p>
+        <section id="loginPanel" hidden aria-label="Bejelentkezés">
+          <form class="export-form" id="loginForm">
+            <label for="username">Felhasználónév</label>
+            <input id="username" name="username" type="text" required minlength="3" maxlength="32" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Felhasználónév">
+            <label for="password">Jelszó</label>
+            <input id="password" name="password" type="password" required autocomplete="current-password">
+            <button id="loginButton" class="btn primary" type="submit">Bejelentkezés</button>
+          </form>
+        </section>
+        <section id="exportPanel" hidden aria-label="Exportálás">
+          <p id="userInfo" class="subtle"></p>
+          <div class="export-result" id="result">
+            <strong>Mentett felmérések</strong>
+            <ul id="attemptList"></ul>
+          </div>
+          <label class="export-checkbox" for="finishedOnly">
+            <input id="finishedOnly" type="checkbox">
+            Csak a befejezett kitöltéseket exportálom
+          </label>
+          <div class="export-actions">
+            <button id="downloadButton" type="button" class="btn primary" disabled>JSON letöltése</button>
+            <button id="refreshButton" type="button" class="btn ghost">Adatok frissítése</button>
+            <button id="logoutButton" type="button" class="btn ghost">Kijelentkezés</button>
+          </div>
+        </section>
+        <p class="export-safe subtle">Az exportfájl tartalmazza a kitöltési válaszokat és a kitöltés technikai azonosítóit. Kezeld bizalmasan, és ne töltsd fel nyilvános GitHub-repóba.</p>
+      </section>
+    </main>
+    <footer>DeepTutor · <a href="./">Vissza a felmérőhöz</a></footer>
+  </div>
+  <script src="./firebase-config.js"></script>
+  <script type="module" src="./export.js"></script>
+</body>
+</html>
