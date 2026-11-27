@@ -1,37 +1,67 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Default deny: sem nyilvános olvasás, sem listázás.
     match /{document=**} { allow read, write: if false; }
 
+    function student() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == "password"
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.active == true
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "student";
+    }
+
+    function validAttempt(attemptId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly([
+          "testId","schemaVersion","attemptId","studentCode","userUid",
+          "startedAt","submittedAt","updatedAt","completed",
+          "durationSeconds","answers","consentVersion"
+        ])
+        && d.keys().hasAll([
+          "testId","schemaVersion","attemptId","studentCode","userUid",
+          "startedAt","submittedAt","updatedAt","completed",
+          "durationSeconds","answers","consentVersion"
+        ])
+        && d.testId == "BIO-DIAG-001"
+        && d.schemaVersion == 1
+        && d.consentVersion == "v1"
+        && d.attemptId == attemptId
+        && d.userUid == request.auth.uid
+        && d.studentCode is string
+        && d.studentCode.size() >= 8
+        && d.studentCode.size() <= 40
+        && d.startedAt is timestamp
+        && d.updatedAt is timestamp
+        && d.durationSeconds is int
+        && d.durationSeconds >= 0
+        && d.durationSeconds <= 604800
+        && d.completed is bool
+        && ((d.completed == false && d.submittedAt == null)
+          || (d.completed == true && d.submittedAt is timestamp))
+        && d.answers is list
+        && d.answers.size() == 40;
+    }
+
+    match /users/{uid} {
+      // Saját profil olvasható; önregisztráció vagy szerepkör-módosítás tilos.
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
     match /attempts/{attemptId} {
-      // Csak egyszeri létrehozás; kitöltők nem olvashatják mások válaszait.
-      allow create: if request.auth != null
-        && request.auth.token.firebase.sign_in_provider == "anonymous"
-        && request.resource.data.keys().hasOnly([
-          "testId","schemaVersion","attemptId","studentCode","userUid",
-          "startedAt","submittedAt","durationSeconds","answers","consentVersion"
-        ])
-        && request.resource.data.keys().hasAll([
-          "testId","schemaVersion","attemptId","studentCode","userUid",
-          "startedAt","submittedAt","durationSeconds","answers","consentVersion"
-        ])
-        && request.resource.data.testId == "BIO-DIAG-001"
-        && request.resource.data.schemaVersion == 1
-        && request.resource.data.consentVersion == "v1"
-        && request.resource.data.attemptId == attemptId
-        && request.resource.data.userUid == request.auth.uid
-        && request.resource.data.studentCode is string
-        && request.resource.data.studentCode.size() >= 8
-        && request.resource.data.studentCode.size() <= 40
-        && request.resource.data.startedAt is timestamp
-        && request.resource.data.submittedAt is timestamp
-        && request.resource.data.durationSeconds is int
-        && request.resource.data.durationSeconds >= 0
-        && request.resource.data.durationSeconds <= 604800
-        && request.resource.data.answers is list
-        && request.resource.data.answers.size() == 40;
-      allow get, list, update, delete: if false;
+      allow create: if student() && validAttempt(attemptId);
+      allow update: if student()
+        && resource.data.userUid == request.auth.uid
+        && resource.data.completed == false
+        && validAttempt(attemptId)
+        && request.resource.data.attemptId == resource.data.attemptId
+        && request.resource.data.studentCode == resource.data.studentCode
+        && request.resource.data.startedAt == resource.data.startedAt
+        && request.resource.data.testId == resource.data.testId
+        && request.resource.data.schemaVersion == resource.data.schemaVersion;
+      allow get, list: if student() && resource.data.userUid == request.auth.uid;
+      allow delete: if false;
     }
   }
 }

@@ -1,0 +1,52 @@
+name: DeepTutor Firestore rules - test and deploy
+on:
+  pull_request:
+    paths:
+      - "bio-felmero/**"
+      - ".github/workflows/deeptutor-firestore.yml"
+  push:
+    branches: [main]
+    paths:
+      - "bio-felmero/**"
+      - ".github/workflows/deeptutor-firestore.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - run: npm install --no-audit --no-fund
+        working-directory: bio-felmero
+      - run: npx firebase-tools@latest emulators:exec --only firestore "npm test" --project demo-deeptutor-bio
+        working-directory: bio-felmero
+  deploy-rules:
+    needs: test-rules
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.FIREBASE_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: firebase-production
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v3
+        with:
+          project_id: deeptutor-bio
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOYER_SERVICE_ACCOUNT }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npx firebase-tools@latest deploy --only firestore:rules --project deeptutor-bio --non-interactive
+        working-directory: bio-felmero
