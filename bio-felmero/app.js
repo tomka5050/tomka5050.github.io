@@ -245,6 +245,7 @@ async function openStudent(student) {
   activeStudent=student;
   state=readState();
   $("signedInLabel").textContent="Belépve: "+student.username;
+  $("exportLink").hidden=false;
   $("logout").hidden=false;
   try {
     const draft=await loadOwnDraft(student.uid);
@@ -296,6 +297,7 @@ $("logout").addEventListener("click",async()=>{
   activeStudent=null;state=null;
   await logoutStudent();
   $("logout").hidden=true;
+  $("exportLink").hidden=true;
   $("signedInLabel").textContent="";
   view("login");
 });
