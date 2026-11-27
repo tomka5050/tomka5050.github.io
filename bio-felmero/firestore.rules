@@ -1,57 +1,57 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Alapértelmezés: minden hozzáférés tiltott, kivéve a lent engedélyezett írásokat.
-    match /{document=**} {
-      allow read, write: if false;
-    }
+    match /{document=**} { allow read, write: if false; }
 
-    function anonymousUser() {
+    function student() {
       return request.auth != null
-        && request.auth.token.firebase.sign_in_provider == "anonymous";
+        && request.auth.token.firebase.sign_in_provider == "password"
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.active == true
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "student";
     }
 
-    function validAttempt(id) {
+    function validAttempt(attemptId) {
       let d = request.resource.data;
       return d.keys().hasOnly([
-          "testId", "schemaVersion", "attemptId", "studentCode", "userUid",
-          "startedAt", "submittedAt", "updatedAt", "completed",
-          "durationSeconds", "answers", "consentVersion"
+          "testId","schemaVersion","attemptId","studentCode","userUid",
+          "startedAt","submittedAt","updatedAt","completed",
+          "durationSeconds","answers","consentVersion"
         ])
         && d.keys().hasAll([
-          "testId", "schemaVersion", "attemptId", "studentCode", "userUid",
-          "startedAt", "submittedAt", "updatedAt", "completed",
-          "durationSeconds", "answers", "consentVersion"
+          "testId","schemaVersion","attemptId","studentCode","userUid",
+          "startedAt","submittedAt","updatedAt","completed",
+          "durationSeconds","answers","consentVersion"
         ])
         && d.testId == "BIO-DIAG-001"
         && d.schemaVersion == 1
         && d.consentVersion == "v1"
-        && d.attemptId == id
+        && d.attemptId == attemptId
         && d.userUid == request.auth.uid
         && d.studentCode is string
         && d.studentCode.size() >= 8
         && d.studentCode.size() <= 40
         && d.startedAt is timestamp
         && d.updatedAt is timestamp
-        && d.completed is bool
-        // Befejezetlen: submittedAt = null; végleges: valódi időbélyeg.
-        && ((d.completed == false && d.submittedAt == null)
-          || (d.completed == true && d.submittedAt is timestamp))
         && d.durationSeconds is int
         && d.durationSeconds >= 0
         && d.durationSeconds <= 604800
+        && d.completed is bool
+        && ((d.completed == false && d.submittedAt == null)
+          || (d.completed == true && d.submittedAt is timestamp))
         && d.answers is list
         && d.answers.size() == 40;
     }
 
-    match /attempts/{attemptId} {
-      // Csak a bejelentkezett anonim felhasználó hozhat létre saját kitöltést.
-      allow create: if anonymousUser() && validAttempt(attemptId);
+    match /users/{uid} {
+      // Saját profil olvasható; önregisztráció vagy szerepkör-módosítás tilos.
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
 
-      // A félkész kitöltést csak az eredeti tulajdonos módosíthatja.
-      // A tulajdonos, az azonosítók és a kezdési idő nem írhatók át.
-      // A véglegesített kitöltés nem módosítható.
-      allow update: if anonymousUser()
+    match /attempts/{attemptId} {
+      allow create: if student() && validAttempt(attemptId);
+      allow update: if student()
         && resource.data.userUid == request.auth.uid
         && resource.data.completed == false
         && validAttempt(attemptId)
@@ -60,9 +60,8 @@ service cloud.firestore {
         && request.resource.data.startedAt == resource.data.startedAt
         && request.resource.data.testId == resource.data.testId
         && request.resource.data.schemaVersion == resource.data.schemaVersion;
-
-      // A kitöltők egymás adatait sem kérdezhetik le.
-      allow get, list, delete: if false;
+      allow get, list: if student() && resource.data.userUid == request.auth.uid;
+      allow delete: if false;
     }
   }
 }

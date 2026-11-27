@@ -13,8 +13,24 @@
     <header class="topbar">
       <a href="./" class="brand" aria-label="DeepTutor kezdőlap"><span class="brand-icon">D</span><span>DeepTutor <small>BIOLÓGIA</small></span></a>
       <span class="pill">2027 · emelt érettségi</span>
+      <span id="signedInLabel" class="subtle"></span>
+      <button type="button" id="logout" class="btn ghost" hidden>Kijelentkezés</button>
     </header>
     <main>
+      <section id="login" class="intro-card" hidden>
+        <span class="eyebrow">DEE​PTUTOR · AZONOSÍTÁS</span>
+        <h1>Bejelentkezés</h1>
+        <p class="lead">A felmérőhöz adminisztrátor által kiosztott felhasználónév és jelszó szükséges. Önálló regisztráció nincs.</p>
+        <form id="loginForm" class="form-login">
+          <label for="username">Felhasználónév</label>
+          <input id="username" name="username" type="text" autocapitalize="none" autocomplete="username" spellcheck="false" required minlength="3" maxlength="32" placeholder="pl. diak01">
+          <label for="password">Jelszó</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+          <button id="loginButton" type="submit" class="btn primary">Bejelentkezés</button>
+        </form>
+        <p id="loginError" role="alert"></p>
+        <div id="legacyNote" class="info" hidden><strong>Régi, anonim kitöltést találtunk ezen a böngészőn.</strong><p>Biztonsági okból ezt nem kapcsoljuk automatikusan egy új felhasználóhoz. Az adatok JSON-ként lementhetők.</p><button id="legacyExport" class="btn ghost">Régi kitöltés exportálása</button></div>
+      </section>
       <section id="intro" class="intro-card">
         <span class="eyebrow">DIAGNOSZTIKUS FELMÉRŐ</span>
         <h1>Honnan induljunk a biológiatanulásban?</h1>
@@ -29,7 +45,7 @@
           <p>A bizonytalan válasz is hasznos. Ha nem tudsz valamit, nyugodtan hagyd üresen, vagy válaszd a „Nem tudom” lehetőséget. A teszt bármikor folytatható ugyanebben a böngészőben.</p>
         </div>
         <div class="privacy">
-          <label class="consent"><input type="checkbox" id="consent"> <span>Elolvastam: a válaszaim a böngészőmben helyileg mentődnek; a felmérő végén JSON-ként letölthetem őket. Ha a weboldal üzemeltetője bekapcsolta a Firebase-t, minden megadott vagy módosított válasz automatikusan (a szöveges válaszok rövid késleltetéssel) egy anonim azonosító alatt a Firebase Firestore-ba kerül további tanulási elemzés céljából. A befejezetlen kitöltések is tárolódnak. Nem adok meg személyes vagy egészségügyi adatokat a szöveges válaszaimban.</span></label>
+          <label class="consent"><input type="checkbox" id="consent"> <span>Elolvastam: a válaszaim a böngészőmben helyileg mentődnek; a felmérő végén JSON-ként letölthetem őket. Ha a weboldal üzemeltetője bekapcsolta a Firebase-t, minden megadott vagy módosított válasz automatikusan (a szöveges válaszok rövid késleltetéssel) a saját felhasználói fiókomhoz (Firebase UID) kapcsolva a Firebase Firestore-ba kerül tanulási elemzés céljából. A befejezetlen kitöltések is tárolódnak. Nem adok meg személyes vagy egészségügyi adatokat a szöveges válaszaimban.</span></label>
         </div>
         <div class="actions">
           <button id="start" class="btn primary" disabled>Felmérő indítása</button>
