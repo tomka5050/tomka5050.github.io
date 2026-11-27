@@ -1,0 +1,917 @@
+{
+  "testId": "BIO-DIAG-001",
+  "version": 1,
+  "title": "Emelt biológia – diagnosztikus felmérő",
+  "language": "hu",
+  "description": "40 kérdés, 6 témakör. Nem osztályzat: a tanulás kiindulópontját méri.",
+  "topics": [
+    {
+      "id": "alapok",
+      "name": "Biológiai alapfogalmak",
+      "books": [
+        "OH-BIO78TB",
+        "OH-BIO910TB/I"
+      ]
+    },
+    {
+      "id": "kemia",
+      "name": "Kémiai alapismeretek",
+      "books": [
+        "OH-BIO910TB/II"
+      ]
+    },
+    {
+      "id": "sejt",
+      "name": "Sejtbiológia és anyagcsere",
+      "books": [
+        "OH-BIO910TB/I",
+        "OH-BIO910TB/II",
+        "OH-BIO1112E"
+      ]
+    },
+    {
+      "id": "genetika",
+      "name": "Genetika",
+      "books": [
+        "OH-BIO910TB/I",
+        "Emelt biológia II."
+      ]
+    },
+    {
+      "id": "ember",
+      "name": "Emberi szervezet",
+      "books": [
+        "OH-BIO910TB/II",
+        "Emelt biológia II."
+      ]
+    },
+    {
+      "id": "okologia",
+      "name": "Ökológia és evolúció",
+      "books": [
+        "OH-BIO910TB/I",
+        "OH-BIO1112E"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "BIO-001",
+      "topic": "alapok",
+      "kind": "single",
+      "prompt": "Mi az élő szervezetek alapvető szerkezeti és működési egysége?",
+      "options": [
+        {
+          "id": "A",
+          "label": "A szerv"
+        },
+        {
+          "id": "B",
+          "label": "A sejt"
+        },
+        {
+          "id": "C",
+          "label": "A szövet"
+        },
+        {
+          "id": "D",
+          "label": "Az atom"
+        }
+      ]
+    },
+    {
+      "id": "BIO-002",
+      "topic": "alapok",
+      "kind": "single",
+      "prompt": "Melyik a helyes szerveződési sorrend az emberi testben?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Sejt → szövet → szerv → szervrendszer"
+        },
+        {
+          "id": "B",
+          "label": "Szerv → szövet → sejt → szervrendszer"
+        },
+        {
+          "id": "C",
+          "label": "Sejt → szerv → szövet → szervrendszer"
+        },
+        {
+          "id": "D",
+          "label": "Szövet → szervrendszer → sejt → szerv"
+        }
+      ]
+    },
+    {
+      "id": "BIO-003",
+      "topic": "alapok",
+      "kind": "single",
+      "prompt": "Mit jelent a homeosztázis?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Minden belső körülmény teljes változatlanságát"
+        },
+        {
+          "id": "B",
+          "label": "A belső környezet szabályozott, dinamikus egyensúlyát"
+        },
+        {
+          "id": "C",
+          "label": "Kizárólag a testhőmérséklet szabályozását"
+        },
+        {
+          "id": "D",
+          "label": "A környezethez való genetikai alkalmazkodást"
+        }
+      ]
+    },
+    {
+      "id": "BIO-004",
+      "topic": "alapok",
+      "kind": "single",
+      "prompt": "Miért alkalmaznak kontrollcsoportot egy kísérletben?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Hogy minden résztvevő ugyanazt a kezelést kapja"
+        },
+        {
+          "id": "B",
+          "label": "Hogy nagyobb legyen a minta"
+        },
+        {
+          "id": "C",
+          "label": "Hogy legyen viszonyítási alap a vizsgált tényező hatásának értékeléséhez"
+        },
+        {
+          "id": "D",
+          "label": "Hogy a kísérlet biztosan igazolja a feltevést"
+        }
+      ]
+    },
+    {
+      "id": "BIO-005",
+      "topic": "alapok",
+      "kind": "single",
+      "prompt": "Melyik állítás ír le populációt?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Egy erdő valamennyi élőlényét"
+        },
+        {
+          "id": "B",
+          "label": "Egy faj összes valaha élt egyedét"
+        },
+        {
+          "id": "C",
+          "label": "Egy tó összes halfaját"
+        },
+        {
+          "id": "D",
+          "label": "Egy faj adott helyen és időben élő, egymással szaporodni képes egyedeit"
+        }
+      ]
+    },
+    {
+      "id": "BIO-006",
+      "topic": "alapok",
+      "kind": "single",
+      "prompt": "Mit nevezünk szervrendszernek?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Együttműködő szervek meghatározott életműködést végző rendszerét"
+        },
+        {
+          "id": "B",
+          "label": "Az azonos alakú sejtek összességét"
+        },
+        {
+          "id": "C",
+          "label": "Egy szerv valamennyi molekuláját"
+        },
+        {
+          "id": "D",
+          "label": "Egy faj egyedeinek csoportját"
+        }
+      ]
+    },
+    {
+      "id": "BIO-007",
+      "topic": "alapok",
+      "kind": "single",
+      "prompt": "Egy növény magassága a 2. órában 4 mm-rel, a 6. órában 12 mm-rel nőtt a kezdőértékhez képest. Mekkora az átlagos növekedési sebesség a 2–6. óra között?",
+      "options": [
+        {
+          "id": "A",
+          "label": "1 mm/óra"
+        },
+        {
+          "id": "B",
+          "label": "2 mm/óra"
+        },
+        {
+          "id": "C",
+          "label": "3 mm/óra"
+        },
+        {
+          "id": "D",
+          "label": "4 mm/óra"
+        }
+      ]
+    },
+    {
+      "id": "BIO-008",
+      "topic": "alapok",
+      "kind": "text",
+      "prompt": "Magyarázd el 2–3 mondatban, miben különbözik egy megfigyelés egy tudományos következtetéstől!",
+      "maxLength": 500
+    },
+    {
+      "id": "BIO-009",
+      "topic": "kemia",
+      "kind": "single",
+      "prompt": "Miért jó oldószer a víz sok ionos és poláris anyag számára?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Mert a vízmolekula poláris"
+        },
+        {
+          "id": "B",
+          "label": "Mert a víz minden kémiai kötést felbont"
+        },
+        {
+          "id": "C",
+          "label": "Mert a víz apoláris"
+        },
+        {
+          "id": "D",
+          "label": "Mert a víz mindig semleges kémhatású"
+        }
+      ]
+    },
+    {
+      "id": "BIO-010",
+      "topic": "kemia",
+      "kind": "single",
+      "prompt": "A pH 3-as oldat hidrogénion-koncentrációja hányszorosa egy pH 5-ös oldaténak?",
+      "options": [
+        {
+          "id": "A",
+          "label": "2-szerese"
+        },
+        {
+          "id": "B",
+          "label": "100-szorosa"
+        },
+        {
+          "id": "C",
+          "label": "1000-szerese"
+        },
+        {
+          "id": "D",
+          "label": "Azonos"
+        }
+      ]
+    },
+    {
+      "id": "BIO-011",
+      "topic": "kemia",
+      "kind": "single",
+      "prompt": "Milyen egységekből épülnek fel a fehérjék?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Zsírsavakból"
+        },
+        {
+          "id": "B",
+          "label": "Nukleotidokból"
+        },
+        {
+          "id": "C",
+          "label": "Aminosavakból"
+        },
+        {
+          "id": "D",
+          "label": "Monoszacharidokból"
+        }
+      ]
+    },
+    {
+      "id": "BIO-012",
+      "topic": "kemia",
+      "kind": "single",
+      "prompt": "Ha 2 g oldott anyagot tartalmaz 100 mL oldat, mennyi a tömegkoncentrációja g/L egységben?",
+      "options": [
+        {
+          "id": "A",
+          "label": "20 g/L"
+        },
+        {
+          "id": "B",
+          "label": "2 g/L"
+        },
+        {
+          "id": "C",
+          "label": "0,2 g/L"
+        },
+        {
+          "id": "D",
+          "label": "200 g/L"
+        }
+      ]
+    },
+    {
+      "id": "BIO-013",
+      "topic": "kemia",
+      "kind": "single",
+      "prompt": "Hogyan rendeződnek a foszfolipidek a sejtmembrán kettős rétegében?",
+      "options": [
+        {
+          "id": "A",
+          "label": "A poláris fejek egymás felé fordulnak"
+        },
+        {
+          "id": "B",
+          "label": "A vízkedvelő fejek a vizes környezet felé néznek"
+        },
+        {
+          "id": "C",
+          "label": "A zsírsavláncok a víz felé fordulnak"
+        },
+        {
+          "id": "D",
+          "label": "Véletlenszerűen helyezkednek el"
+        }
+      ]
+    },
+    {
+      "id": "BIO-014",
+      "topic": "kemia",
+      "kind": "text",
+      "prompt": "Írd le röviden, miért csökkenhet egy enzim működése szélsőséges pH-érték vagy magas hőmérséklet hatására!",
+      "maxLength": 500
+    },
+    {
+      "id": "BIO-015",
+      "topic": "sejt",
+      "kind": "single",
+      "prompt": "Melyik sejtalkotóban zajlik az eukarióta sejtek aerob sejtlégzésének jelentős része?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Lizoszóma"
+        },
+        {
+          "id": "B",
+          "label": "Mitokondrium"
+        },
+        {
+          "id": "C",
+          "label": "Golgi-készülék"
+        },
+        {
+          "id": "D",
+          "label": "Sejtmag"
+        }
+      ]
+    },
+    {
+      "id": "BIO-016",
+      "topic": "sejt",
+      "kind": "single",
+      "prompt": "Melyik folyamat köthető közvetlenül a kloroplasztiszhoz?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Tejsavas erjedés"
+        },
+        {
+          "id": "B",
+          "label": "Fehérjék sejtmagon belüli lebontása"
+        },
+        {
+          "id": "C",
+          "label": "Fotoszintézis"
+        },
+        {
+          "id": "D",
+          "label": "DNS replikációja az állati sejtmagban"
+        }
+      ]
+    },
+    {
+      "id": "BIO-017",
+      "topic": "sejt",
+      "kind": "single",
+      "prompt": "Ozmózis során egy megfelelően féligáteresztő hártyán át a víz nettó mozgásának iránya általában...",
+      "options": [
+        {
+          "id": "A",
+          "label": "a kisebb oldottanyag-koncentráció felől a nagyobb felé"
+        },
+        {
+          "id": "B",
+          "label": "mindig a nagyobb nyomás felől a kisebb felé"
+        },
+        {
+          "id": "C",
+          "label": "mindig a nagyobb sejtből a kisebb felé"
+        },
+        {
+          "id": "D",
+          "label": "független a vízpotenciáltól"
+        }
+      ]
+    },
+    {
+      "id": "BIO-018",
+      "topic": "sejt",
+      "kind": "single",
+      "prompt": "Mi jellemző a prokarióta sejtekre?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Nincs membránnal körülhatárolt sejtmagjuk"
+        },
+        {
+          "id": "B",
+          "label": "Nincs örökítőanyaguk"
+        },
+        {
+          "id": "C",
+          "label": "Nincs sejtmembránjuk"
+        },
+        {
+          "id": "D",
+          "label": "Mindig többsejtűek"
+        }
+      ]
+    },
+    {
+      "id": "BIO-019",
+      "topic": "sejt",
+      "kind": "single",
+      "prompt": "Mit nevezünk transzkripciónak?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Fehérje képzését riboszómán"
+        },
+        {
+          "id": "B",
+          "label": "RNS szintézisét DNS-minta alapján"
+        },
+        {
+          "id": "C",
+          "label": "DNS megkettőződését"
+        },
+        {
+          "id": "D",
+          "label": "Fehérje lebontását"
+        }
+      ]
+    },
+    {
+      "id": "BIO-020",
+      "topic": "sejt",
+      "kind": "single",
+      "prompt": "Mi az ATP egyik legfontosabb feladata a sejtben?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Az örökítőanyag hosszú távú tárolása"
+        },
+        {
+          "id": "B",
+          "label": "A sejtfal felépítése"
+        },
+        {
+          "id": "C",
+          "label": "Energia közvetítése különféle sejtműködésekhez"
+        },
+        {
+          "id": "D",
+          "label": "A genetikai kód megváltoztatása"
+        }
+      ]
+    },
+    {
+      "id": "BIO-021",
+      "topic": "sejt",
+      "kind": "single",
+      "prompt": "Miért csökkenhet meredeken egy enzim aktivitása túl magas hőmérsékleten?",
+      "options": [
+        {
+          "id": "A",
+          "label": "A fehérje térszerkezete károsodhat"
+        },
+        {
+          "id": "B",
+          "label": "A szubsztrát automatikusan eltűnik"
+        },
+        {
+          "id": "C",
+          "label": "A DNS mindig megkettőződik"
+        },
+        {
+          "id": "D",
+          "label": "Az ATP minden esetben megszűnik"
+        }
+      ]
+    },
+    {
+      "id": "BIO-022",
+      "topic": "sejt",
+      "kind": "text",
+      "prompt": "Magyarázd el 3–4 mondatban, hogyan kapcsolódik egymáshoz a fotoszintézis és a sejtlégzés anyag- és energiaforgalma!",
+      "maxLength": 500
+    },
+    {
+      "id": "BIO-023",
+      "topic": "genetika",
+      "kind": "single",
+      "prompt": "Melyik genotípus heterozigóta egy kétallélos génre nézve?",
+      "options": [
+        {
+          "id": "A",
+          "label": "AA"
+        },
+        {
+          "id": "B",
+          "label": "Aa"
+        },
+        {
+          "id": "C",
+          "label": "aa"
+        },
+        {
+          "id": "D",
+          "label": "A"
+        }
+      ]
+    },
+    {
+      "id": "BIO-024",
+      "topic": "genetika",
+      "kind": "single",
+      "prompt": "Egyszerű, teljes dominanciájú öröklődésben Aa × Aa keresztezésből mekkora valószínűséggel lesz aa utód?",
+      "options": [
+        {
+          "id": "A",
+          "label": "25%"
+        },
+        {
+          "id": "B",
+          "label": "50%"
+        },
+        {
+          "id": "C",
+          "label": "75%"
+        },
+        {
+          "id": "D",
+          "label": "100%"
+        }
+      ]
+    },
+    {
+      "id": "BIO-025",
+      "topic": "genetika",
+      "kind": "single",
+      "prompt": "Miért fontos a meiózis az ivaros szaporodásban?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Mert mindig két azonos diploid sejtet hoz létre"
+        },
+        {
+          "id": "B",
+          "label": "Mert kizárólag testi sejtekben zajlik"
+        },
+        {
+          "id": "C",
+          "label": "Mert csökkenti a kromoszómaszámot és növeli a genetikai változatosságot"
+        },
+        {
+          "id": "D",
+          "label": "Mert megszünteti a mutációkat"
+        }
+      ]
+    },
+    {
+      "id": "BIO-026",
+      "topic": "genetika",
+      "kind": "single",
+      "prompt": "Melyik a DNS-re jellemző szabályos bázispárosodás?",
+      "options": [
+        {
+          "id": "A",
+          "label": "A–C és G–T"
+        },
+        {
+          "id": "B",
+          "label": "A–T és G–C"
+        },
+        {
+          "id": "C",
+          "label": "A–U és G–C"
+        },
+        {
+          "id": "D",
+          "label": "A–G és C–T"
+        }
+      ]
+    },
+    {
+      "id": "BIO-027",
+      "topic": "genetika",
+      "kind": "single",
+      "prompt": "Miért gyakoribb sok X-kromoszómához kötött recesszív tulajdonság megjelenése XY kromoszómakészlet esetén?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Mert az Y-kromoszóma mindig domináns"
+        },
+        {
+          "id": "B",
+          "label": "Mert az X-kromoszómán nincs DNS"
+        },
+        {
+          "id": "C",
+          "label": "Mert az X-kromoszóma adott génjéből általában csak egy példány található"
+        },
+        {
+          "id": "D",
+          "label": "Mert a meiózis nem zajlik le"
+        }
+      ]
+    },
+    {
+      "id": "BIO-028",
+      "topic": "genetika",
+      "kind": "text",
+      "prompt": "Hasonlítsd össze röviden a mitózist és a meiózist: mi történik a kromoszómaszámmal, és mi a két folyamat szerepe?",
+      "maxLength": 500
+    },
+    {
+      "id": "BIO-029",
+      "topic": "ember",
+      "kind": "single",
+      "prompt": "Hol történik a belélegzett oxigén és a vér közötti gázcsere döntő része?",
+      "options": [
+        {
+          "id": "A",
+          "label": "A légcsőben"
+        },
+        {
+          "id": "B",
+          "label": "A garatban"
+        },
+        {
+          "id": "C",
+          "label": "A hörgők porcos falában"
+        },
+        {
+          "id": "D",
+          "label": "A tüdő léghólyagocskáiban"
+        }
+      ]
+    },
+    {
+      "id": "BIO-030",
+      "topic": "ember",
+      "kind": "single",
+      "prompt": "Mi a hemoglobin egyik fő feladata?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Oxigén szállítása a vérben"
+        },
+        {
+          "id": "B",
+          "label": "Vizelet termelése"
+        },
+        {
+          "id": "C",
+          "label": "Emésztőenzimek előállítása"
+        },
+        {
+          "id": "D",
+          "label": "Az idegsejtek közti jelátvitel"
+        }
+      ]
+    },
+    {
+      "id": "BIO-031",
+      "topic": "ember",
+      "kind": "single",
+      "prompt": "A nefron melyik részén történik a vérplazma elsődleges szűrleteképzése?",
+      "options": [
+        {
+          "id": "A",
+          "label": "A gyűjtőcsatornában"
+        },
+        {
+          "id": "B",
+          "label": "A vesetestecskében (glomerulus és Bowman-tok)"
+        },
+        {
+          "id": "C",
+          "label": "A húgyhólyagban"
+        },
+        {
+          "id": "D",
+          "label": "A vesevezetékben"
+        }
+      ]
+    },
+    {
+      "id": "BIO-032",
+      "topic": "ember",
+      "kind": "single",
+      "prompt": "Melyik hormon csökkenti közvetlenül a vércukorszintet megfelelő körülmények között?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Glukagon"
+        },
+        {
+          "id": "B",
+          "label": "Inzulin"
+        },
+        {
+          "id": "C",
+          "label": "Adrenalin"
+        },
+        {
+          "id": "D",
+          "label": "Kortizol"
+        }
+      ]
+    },
+    {
+      "id": "BIO-033",
+      "topic": "ember",
+      "kind": "single",
+      "prompt": "Melyik a gerincvelői reflexív lehetséges helyes sorrendje?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Mozgató neuron → receptor → érző neuron → izom"
+        },
+        {
+          "id": "B",
+          "label": "Receptor → mozgató neuron → érző neuron → izom"
+        },
+        {
+          "id": "C",
+          "label": "Receptor → érző neuron → központi átkapcsolás → mozgató neuron → végrehajtó szerv"
+        },
+        {
+          "id": "D",
+          "label": "Receptor → izom → érző neuron → gerincvelő"
+        }
+      ]
+    },
+    {
+      "id": "BIO-034",
+      "topic": "ember",
+      "kind": "text",
+      "prompt": "Magyarázd el példával, hogyan működik a negatív visszacsatolás a vércukorszint szabályozásában!",
+      "maxLength": 500
+    },
+    {
+      "id": "BIO-035",
+      "topic": "okologia",
+      "kind": "single",
+      "prompt": "Melyik szervezet áll rendszerint egy szárazföldi táplálékhálózat termelői szintjén?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Ragadozó emlős"
+        },
+        {
+          "id": "B",
+          "label": "Zöld növény"
+        },
+        {
+          "id": "C",
+          "label": "Lebontó gomba"
+        },
+        {
+          "id": "D",
+          "label": "Növényevő rovar"
+        }
+      ]
+    },
+    {
+      "id": "BIO-036",
+      "topic": "okologia",
+      "kind": "single",
+      "prompt": "Mit fejez ki a populációsűrűség?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Az egységnyi területre vagy térfogatra jutó egyedszámot"
+        },
+        {
+          "id": "B",
+          "label": "Egy populáció fajszámát"
+        },
+        {
+          "id": "C",
+          "label": "A táplálékhálózat hosszát"
+        },
+        {
+          "id": "D",
+          "label": "Az egyedek átlagos testtömegét"
+        }
+      ]
+    },
+    {
+      "id": "BIO-037",
+      "topic": "okologia",
+      "kind": "single",
+      "prompt": "Mikor beszélhetünk természetes szelekcióról?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Ha minden egyed azonos számú utódot hagy"
+        },
+        {
+          "id": "B",
+          "label": "Ha a környezet tudatosan változtatja meg a DNS-t"
+        },
+        {
+          "id": "C",
+          "label": "Ha kizárólag véletlenszerűen változik az allélarány"
+        },
+        {
+          "id": "D",
+          "label": "Ha öröklődő különbségek miatt eltérő a szaporodási siker"
+        }
+      ]
+    },
+    {
+      "id": "BIO-038",
+      "topic": "okologia",
+      "kind": "single",
+      "prompt": "Mit jelent a genetikai sodródás?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Mindig célirányos alkalmazkodást"
+        },
+        {
+          "id": "B",
+          "label": "A természetes szelekció teljes hiányát minden esetben"
+        },
+        {
+          "id": "C",
+          "label": "Allélgyakoriságok véletlen, mintavételi hatások miatti változását"
+        },
+        {
+          "id": "D",
+          "label": "Az új fajok kizárólagos kialakulási módját"
+        }
+      ]
+    },
+    {
+      "id": "BIO-039",
+      "topic": "okologia",
+      "kind": "single",
+      "prompt": "Melyik folyamat von ki közvetlenül szén-dioxidot a légkörből a globális szénkörforgás részeként?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Fotoszintézis"
+        },
+        {
+          "id": "B",
+          "label": "Aerob sejtlégzés"
+        },
+        {
+          "id": "C",
+          "label": "Égés"
+        },
+        {
+          "id": "D",
+          "label": "Szerves anyagok lebontása"
+        }
+      ]
+    },
+    {
+      "id": "BIO-040",
+      "topic": "okologia",
+      "kind": "text",
+      "prompt": "Magyarázd el 3–4 mondatban, miért beszélünk az ökoszisztémákban az anyagok körforgásáról, de az energia áramlásáról!",
+      "maxLength": 500
+    }
+  ]
+}
